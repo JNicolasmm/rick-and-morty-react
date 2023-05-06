@@ -1,6 +1,6 @@
 import Card from './Card';
 
-export default function Cards(props) {
+const Cards = (props) => {
   const {characters} = props
   return (
     <div>
@@ -15,10 +15,12 @@ export default function Cards(props) {
             gender = {char.gender}
             origin = {char.origin.name}
             image = {char.image}
-            onClose = {() => window.alert('Emulamos que se cierra la card')}
+            onClose = {props.onClose}
          />
         )
       })}
     </div>
    )
 }
+
+export default Cards
