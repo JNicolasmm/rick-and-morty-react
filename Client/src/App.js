@@ -8,20 +8,22 @@ import Detail from './components/Detail.jsx'
 import Form from './components/Form.jsx';
 import Favorites from './components/Favorites.jsx';
 
-const EMAIL = 'yomismo@hotmail.com'
-
-const PASSWORD = 'rico69'
-
 function App() {
 
   const navigate = useNavigate()
 
   const [access, setAccess] = useState(false)
 
-  function login(userData) {
-    if (userData.email === EMAIL && userData.password === PASSWORD) {
-      setAccess(true)
-      navigate('/home')
+  async function login(userData) {
+    try {
+      const { email, password } = userData;
+      const URL = 'http://localhost:3001/rickandmorty/login/';
+      const { data } = await axios(URL + `?email=${email}&password=${password}`)
+      const { access } = data;
+      setAccess(access);
+      access && navigate('/home')
+    } catch (error) {
+      console.log(error.message);
     }
   }
 
@@ -33,14 +35,17 @@ function App() {
 
   const [characters, setCharacters] = useState([])
 
-  function onSearch(id) {
-    axios(`http://localhost:3001/rickandmorty/character/${id}`).then(({ data }) => {
+  async function onSearch(id) {
+    try {
+      const { data } = await axios(`http://localhost:3001/rickandmorty/character/${id}`)
       if (data.name) {
         setCharacters([...characters, data]);
       } else {
-        window.alert('¡No hay personajes con este ID!');
+        alert('No hay personajes con ese id')
       }
-    });
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   const onClose = (id) => {
